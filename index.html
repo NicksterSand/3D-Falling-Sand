@@ -4,10 +4,11 @@
 	<title>3D Falling Sand</title>
 	<meta charset="UTF-8">
 	<script src="main.js"></script>
-	<script src="gl-matrix.js"></script>
+	<script src="vendor/gl-matrix.js"></script>
 </head>
 <body>
 	<h1>3D Falling Sand</h1>
+	<p id="particleType">Particle Type: None</p>
 	<canvas id="glCanvas" height="480" width="620"></canvas>
 	<button onclick="moveCursor(1,0,0)">+X</button>
 	<button onclick="moveCursor(-1,0,0)">-X</button>
@@ -15,5 +16,6 @@
 	<button onclick="moveCursor(0,-1,0)">-Y</button>
 	<button onclick="moveCursor(0,0,1)">+Z</button>
 	<button onclick="moveCursor(0,0,-1)">-Z</button>
+	<button onclick="placeParticle(1)">Sand</button>
 </body>
 </html>
