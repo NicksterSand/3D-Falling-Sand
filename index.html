@@ -5,17 +5,76 @@
 	<meta charset="UTF-8">
 	<script src="main.js"></script>
 	<script src="vendor/gl-matrix.js"></script>
+	<style>
+		h1{
+			text-align:center;
+			font-weight:bold;
+			font-size:50px;
+			margin:0;
+			padding:5px;
+		}
+		#particleType{
+			font-size:20px;
+			width:620px;
+			margin:auto;
+		}
+		#glCanvas{
+			width:620px;
+			margin:5px auto;
+			display:block;
+			padding:0;
+		}
+		#buttons{
+			margin:auto;
+			width:620px;
+		}
+		#moveButtons{
+			width:150px;
+			float:left;
+			padding:0 75px;
+		}
+		#particleButtons{
+			width:300px;
+			float:right;
+		}
+		button{
+			border-radius:10px;
+			background-color:white;
+			border:2px solid black;
+			font-size:25px;
+			padding:10px;
+			box-shadow:5px 5px 5px black;
+			cursor:pointer;
+		}
+		.block{
+			display:block;
+			clear:both;
+			margin:auto;
+		}
+		.left{
+			float:left;
+		}
+		.right{
+			float:right;
+		}
+	</style>
 </head>
 <body>
 	<h1>3D Falling Sand</h1>
 	<p id="particleType">Particle Type: None</p>
 	<canvas id="glCanvas" height="480" width="620"></canvas>
-	<button onclick="moveCursor(1,0,0)">+X</button>
-	<button onclick="moveCursor(-1,0,0)">-X</button>
-	<button onclick="moveCursor(0,1,0)">+Y</button>
-	<button onclick="moveCursor(0,-1,0)">-Y</button>
-	<button onclick="moveCursor(0,0,1)">+Z</button>
-	<button onclick="moveCursor(0,0,-1)">-Z</button>
-	<button onclick="placeParticle(1)">Sand</button>
+	<div id="buttons">
+		<div id="moveButtons">
+			<button class="block" onclick="moveCursor(0,1,0)" >+Y</button>
+			<button class="left"  onclick="moveCursor(-1,0,0)">-X</button>
+			<button class="right" onclick="moveCursor(1,0,0)" >+X</button>
+			<button class="block" onclick="moveCursor(0,-1,0)">-Y</button>
+			<button class="left"  onclick="moveCursor(0,0,1)" >+Z</button>
+			<button class="right" onclick="moveCursor(0,0,-1)">-Z</button>
+		</div>
+		<div id="particleButtons">
+			<button onclick="placeParticle(1)">Sand</button>
+		</div>
+	</div>
 </body>
 </html>
