@@ -6,11 +6,11 @@ for(var i = 0; i < particleNum; i++){
 	particleTriCount.push(0);
 }
 var grid = [];
-for(var i = 0; i < gridSize-1;i++){
+for(var i = 0; i < gridSize;i++){
 	grid.push([]);
-	for(var j = 0; j < gridSize-1; j++){
+	for(var j = 0; j < gridSize; j++){
 		grid[i].push([]);
-		for(var k = 0; k < gridSize-1; k++){
+		for(var k = 0; k < gridSize; k++){
 			grid[i][j].push(0);
 		}
 	}
@@ -24,7 +24,7 @@ function main(){
 		alert("Could not initialize WebGL");
 		return;
 	}	
-
+	document.onkeydown = keyPress;
 	const vsSource = `
 		attribute vec4 aPosition;
 	
@@ -155,9 +155,9 @@ function drawScene(gl, borderBuffers, borderShader, cursorBuffers, cursorShader,
 	const borderModelViewMatrix = glMatrix.mat4.create();
 	glMatrix.mat4.translate(borderModelViewMatrix, borderModelViewMatrix, [0,0,-5]);
 	const cursorModelViewMatrix = glMatrix.mat4.create();
-	glMatrix.mat4.translate(cursorModelViewMatrix, cursorModelViewMatrix, [-1 + (2/gridSize) + cursorPos[0]*(2/gridSize),-1 + (2/gridSize) + cursorPos[1]*(2/gridSize),-6 + (2/gridSize) + cursorPos[2]*(2/gridSize)]);
+	glMatrix.mat4.translate(cursorModelViewMatrix, cursorModelViewMatrix, [-1 + (1/gridSize) + cursorPos[0]*(2/gridSize),-1 + (1/gridSize) + cursorPos[1]*(2/gridSize),-6 + (1/gridSize) + cursorPos[2]*(2/gridSize)]);
 	const particleModelViewMatrix = glMatrix.mat4.create();
-	glMatrix.mat4.translate(particleModelViewMatrix, particleModelViewMatrix, [-1,-1,-5]);
+	glMatrix.mat4.translate(particleModelViewMatrix, particleModelViewMatrix, [-1,-1,-3.5]);
 	//Draw Border
 	{
 		gl.bindBuffer(gl.ARRAY_BUFFER, borderBuffers.position);
@@ -211,11 +211,11 @@ function getMesh(particle){
 	const size = 2/gridSize;
 
 	if(particlePhysType(particle) == 1){
-		for(var x = 0; x < gridSize - 1; x++){
-			for(var y = 0; y < gridSize - 1; y++){
-				for(var z = 0; z < gridSize - 1; z++){
+		for(var x = 0; x < gridSize; x++){
+			for(var y = 0; y < gridSize; y++){
+				for(var z = 0; z < gridSize; z++){
 					if(grid[x][y][z] == particle){
-						if(x+1 == gridSize - 1 || grid[x + 1][y][z] != particle){
+						if(x+1 == gridSize || grid[x + 1][y][z] != particle){
 							positionss = positionss.concat([
 								(size*(x+1)), (size*(y)), -2.5 + (size*(z)), //-Y -Z
 								(size*(x+1)), (size*(y+1)), -2.5 + (size*(z)), //+Y -Z
@@ -235,7 +235,7 @@ function getMesh(particle){
 							indicess = indicess.concat([gridCount,gridCount+1,gridCount+2,gridCount+1,gridCount+2,gridCount+3]);
 							gridCount += 4;
 						}
-						if(y+1 == gridSize - 1 || grid[x][y + 1][z] != particle){
+						if(y+1 == gridSize || grid[x][y + 1][z] != particle){
 							positionss = positionss.concat([
 								(size*(x)), (size*(y+1)), -2.5 + (size*(z)), //-X -Z
 								(size*(x+1)), (size*(y+1)), -2.5 + (size*(z)), //+X -Z
@@ -255,7 +255,7 @@ function getMesh(particle){
 							indicess = indicess.concat([gridCount,gridCount+1,gridCount+2,gridCount+1,gridCount+2,gridCount+3]);
 							gridCount += 4;
 						}
-						if(z+1 == gridSize - 1 || grid[x][y][z + 1] != particle){
+						if(z+1 == gridSize || grid[x][y][z + 1] != particle){
 							positionss = positionss.concat([
 								(size*(x)), (size*(y)), -2.5 + (size*(z+1)), //-Y -X
 								(size*(x)), (size*(y+1)), -2.5 + (size*(z+1)), //+Y -X
@@ -287,9 +287,9 @@ function getMesh(particle){
 	};
 }
 function moveCursor(x,y,z){
-	cursorPos[0] += (cursorPos[0]+x>=0 && cursorPos[0]+x<gridSize - 1)?x:0;
-	cursorPos[1] += (cursorPos[1]+y>=0 && cursorPos[1]+y<gridSize - 1)?y:0;
-	cursorPos[2] += (cursorPos[2]+z>=0 && cursorPos[2]+z<gridSize - 1)?z:0;
+	cursorPos[0] += (cursorPos[0]+x>=0 && cursorPos[0]+x<gridSize)?x:0;
+	cursorPos[1] += (cursorPos[1]+y>=0 && cursorPos[1]+y<gridSize)?y:0;
+	cursorPos[2] += (cursorPos[2]+z>=0 && cursorPos[2]+z<gridSize)?z:0;
 }
 function placeParticle(particle){
 	grid[cursorPos[0]][cursorPos[1]][cursorPos[2]] = particle;
@@ -313,5 +313,25 @@ function getParticleName(particle){
 		return "Sand";
 	}
 	return "None";
+}
+function keyPress(event){
+	if(event.code == "KeyW")
+		moveCursor(0,1,0);
+	else if(event.code == "KeyA")
+		moveCursor(-1,0,0);
+	else if(event.code == "KeyS")
+		moveCursor(0,-1,0);
+	else if(event.code == "KeyD")
+		moveCursor(1,0,0);
+	else if(event.code == "KeyQ")
+		moveCursor(0,0,1);
+	else if(event.code == "KeyE")
+		moveCursor(0,0,-1);
+	else if(event.code.substring(0,5) == "Digit"){
+		var num = parseInt(event.code.charAt(5));
+		if(num != 0 && num < particleNum)
+			placeParticle(num);
+	}
+
 }
 window.onload = main;
