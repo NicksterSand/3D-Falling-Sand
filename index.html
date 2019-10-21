@@ -6,6 +6,16 @@
 	<script src="main.js"></script>
 	<script src="vendor/gl-matrix.js"></script>
 	<style>
+		#infoPane{
+			position:fixed;
+			width:200px;
+			background-color:#fafad2;
+			padding:5px;
+		}
+		#infoPane p{
+			text-align:left;
+			font-size:16px;
+		}
 		h1{
 			text-align:center;
 			font-weight:bold;
@@ -60,6 +70,13 @@
 	</style>
 </head>
 <body>
+	<div id="infoPane">
+		<p>Keyboard Controls:</p>
+		<p>+Y: W, -Y: S</p>
+		<p>+X: D, -X: A</p>
+		<p>+Z: Q, -Z: E</p>
+		<p>Particles: 0-3</p>
+	</div>
 	<h1>3D Falling Sand</h1>
 	<p id="particleType">Particle Type: None</p>
 	<canvas id="glCanvas" height="480" width="620"></canvas>
@@ -74,6 +91,9 @@
 		</div>
 		<div id="particleButtons">
 			<button onclick="placeParticle(1)">Sand</button>
+			<button onclick="placeParticle(2)">Stone</button>
+			<button onclick="placeParticle(3)">Water</button>
+			<button onclick="placeParticle(0)">Erase</button>
 		</div>
 	</div>
 </body>
